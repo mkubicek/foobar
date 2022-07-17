@@ -18,11 +18,11 @@ def buildTree(h, root):
         root.left = buildTree(h - 1, Node())
     return root
 
-def traverseAndNumberTreePostOrder(root):
+def labelTreePostOrder(root):
     global i
     if root:
-        traverseAndNumberTreePostOrder(root.left)
-        traverseAndNumberTreePostOrder(root.right)
+        labelTreePostOrder(root.left)
+        labelTreePostOrder(root.right)
         root.value = i
         i = i + 1
 
@@ -37,7 +37,7 @@ def solution(h, q):
     global i
     i = 1
     root = buildTree(h, Node())
-    traverseAndNumberTreePostOrder(root)
+    labelTreePostOrder(root)
     buildChildParentDict(root)
     result = []
     for index in q:
@@ -45,8 +45,8 @@ def solution(h, q):
             result.append(childParentDict[index])
         else:
             result.append(-1)
-    print(result)
+    return result
     
 if __name__ == '__main__':
-    solution(3, [7, 3, 5, 1])
-    solution(5, [19, 14, 28])
+    assert solution(3, [7, 3, 5, 1]) == [-1,7,6,3]
+    assert solution(5, [19, 14, 28]) == [21,15,29]
