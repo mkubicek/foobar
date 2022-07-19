@@ -1,5 +1,5 @@
 #
-# Brute force solution for Ion Flux Relabeling
+# Naive solution for Ion Flux Relabelings
 # Time O(n)
 # Space O(n)
 #
