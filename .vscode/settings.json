@@ -1,0 +1,7 @@
+{
+    "python.defaultInterpreterPath": "/opt/homebrew/anaconda3/envs/python-27",
+    "python.autoComplete.extraPaths": [
+    
+    ],
+    "python.analysis.extraPaths": []
+}
