@@ -5,13 +5,12 @@
 #
 import itertools
 
-
 def solution(digits):
     """
     Return largest number that can be formed by provided digits and is divisible by 3.
     """
     digits.sort(reverse=True)
-    for r in range(len(digits), 1, -1):
+    for r in range(len(digits), 0, -1):
         for perm in itertools.combinations(digits, r):
             if(sum(perm) % 3 == 0):
                 return int(''.join(map(str,perm)))
