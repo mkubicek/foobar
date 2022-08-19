@@ -61,20 +61,73 @@ def b(L):
 		else:
 			return 0
 
+def c(digits):
+    digits.sort(reverse=True)
+    # variables to hold index of digits with %3 remainder 1 and 2
+    r1_a = None
+    r1_b = None
+    r2_a = None
+    r2_b = None
+    modulo3 = [digit % 3 for digit in digits]
+	
+	# Compute L mod 3 and save up to two elements whose remainder is 1 and up to two elements whose remainder is 2
+    for i in range(len(digits) - 1, -1, -1):
+        if(modulo3[i] == 1 and (r1_a is not None or r1_b is not None)):
+            if r1_a is not None:
+                r1_a = i
+            elif r1_b is not None:
+                r1_b = i
+            else:
+                pass
+        elif(modulo3[i] == 2 and (r2_a is not None or r2_b is not None)):
+            if r2_a is not None:
+                r2_a = i
+            elif r2_b is not None:
+                r2_b = i
+            else:
+                pass
+        else:
+            pass
+    
+    total = sum(modulo3)
+    # Only three scenarios can occur: (total % 3) == 0, (total % 3) == 1 or (total % 3) == 2
+    if(total % 3 == 0):
+        return int(''.join(map(str,digits)))
+    elif (total % 3 == 1):
+        if(r1_a is not None):
+            del digits[r1_a]
+            if(len(digits) > 0):
+                return int(''.join(map(str, digits)))
+            return 0
+        elif(r2_a is not None and r2_b is not None):
+            del digits[r2_a]
+            del digits[r2_a]
+            if(len(digits) > 0):
+                return int(''.join(map(str, digits)))
+            return 0
+        else:
+            return 0
+    else:
+        if(r2_a is not None):
+            del digits[r2_a]
+            if(len(digits) > 0):
+                return int(''.join(map(str, digits)))
+            return 0
+        elif(r1_a is not None and r1_b is not None):
+            del digits[r1_a]
+            del digits[r1_b]
+            if(len(digits) > 0):
+                return int(''.join(map(str, digits)))
+            return 0
+        else:
+            return 0
+
 if __name__ == '__main__':
     import timeit
-    a_slowest = []
-    b_slowest = []
-    while True:
-        digits = [random.randint(0, 9) for i in range(19)]
-        a_time = timeit.timeit("a(" + str(digits) + ")", setup="from __main__ import a")
-        a_slowest.append((a_time, "".join(map(str, digits))))
-        a_slowest.sort(reverse=True)
-        a_slowest = a_slowest[:10]
-        print("a: " + str(a_slowest))
-        
-        b_time = timeit.timeit("b(" + str(digits) + ")", setup="from __main__ import b")
-        b_slowest.append((b_time, "".join(map(str, digits))))
-        b_slowest.sort(reverse=True)
-        b_slowest = b_slowest[:10]
-        print("b: " + str(b_slowest))
+    inputs = ['2100292407616905611', '0475942439666624275']
+    for input in inputs:
+        input = map(int,list(input))
+        print("Input: " + str(input))
+        print(timeit.timeit("a(" + str(input) + ")", setup="from __main__ import a"))
+        print(timeit.timeit("b(" + str(input) + ")", setup="from __main__ import b"))
+        print(timeit.timeit("c(" + str(input) + ")", setup="from __main__ import c"))
