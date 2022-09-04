@@ -45,9 +45,25 @@ def multiply(X, Y):
 
 def solution(m):
     denominators = [sum(x) for x in m]
-    final_states = denominators.count(0)
-    Q = [x[:len(m)-final_states] for x in m[:len(m)-final_states]]
-    R = [x[len(m)-final_states:] for x in m[:len(m)-final_states]]
+    absorbing_states = denominators.count(0)
+    transient_states_idx = [idx for idx, state in enumerate(m) if sum(state) != 0]
+    absorbing_states_idx = [idx for idx, state in enumerate(m) if sum(state) == 0]
+    
+    # special case: state 0 is final state
+    if sum(m[0]) == 0:
+        result = [1]
+        result.extend([0] * (absorbing_states - 1))
+        result.append(1)
+        return result
+
+    # order m so that all absorbing states follow transient states
+    stateReorder = transient_states_idx
+    stateReorder.extend(absorbing_states_idx)
+    m2 = [[m[i][j] for j in stateReorder] for i in stateReorder]
+    denominators = [sum(x) for x in m2]
+    
+    Q = [x[:len(m2)-absorbing_states] for x in m2[:len(m2)-absorbing_states]]
+    R = [x[len(m2)-absorbing_states:] for x in m2[:len(m2)-absorbing_states]]
     for i in range(len(Q)):
         for j in range(len(Q[0])):
             Q[i][j] = Fraction(Q[i][j], denominators[i])
@@ -78,5 +94,7 @@ def solution(m):
     return P
 
 if __name__ == "__main__":
+    print(solution([[0, 1, 2, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 3, 4], [0, 0, 0, 0,0], [0, 0, 0, 0, 0]]))
+    print(solution([[0, 0, 0, 0, 0], [0, 0, 0, 3, 4], [0, 0, 0, 0, 0], [0, 0, 0, 0,0], [0, 0, 0, 0, 0]]))
     print(solution([[0, 2, 1, 0, 0], [0, 0, 0, 3, 4], [0, 0, 0, 0, 0], [0, 0, 0, 0,0], [0, 0, 0, 0, 0]]))
     print(solution([[0, 1, 0, 0, 0, 1], [4, 0, 0, 3, 2, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]]))
